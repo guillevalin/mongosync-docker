@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongosync
+  namespace: development
+  labels:
+    app: mongosync
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongosync
+  template:
+    metadata:
+      namespace: development
+      labels:
+        app: mongosync
+    spec:
+      containers:
+        - name: mongosync
+          image: guillevalin/mongosync:1.6.1
+          ports:
+            - containerPort: 27182
+              protocol: TCP
+          env:
+            - name: SRC_URI
+              value: 'mongodb://localhost:27017'
+            - name: DST_URI
+              value: 'mongodb://localhost:27018'
+          resources:
+            requests:
+              cpu: 200m
+              memory: 512Mi
+            limits:
+              cpu: 1
+              memory: 4Gi
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
