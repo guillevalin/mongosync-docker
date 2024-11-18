@@ -13,13 +13,13 @@ jobs:
 
         steps:
             - name: Checkout repository
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
 
             - name: Log in to Docker Hub
               run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
             - name: Build Docker image
-              run: docker build --build-arg VERSION=${{ github.event.inputs.VERSION }} -t ${{ secrets.DOCKER_USERNAME }}/mongosync-docker:${{ github.event.inputs.VERSION }}
+              run: docker build --build-arg VERSION=${{ github.event.inputs.VERSION }} . -t ${{ secrets.DOCKER_USERNAME }}/mongosync-docker:${{ github.event.inputs.VERSION }}
 
             - name: Push Docker image
               run: docker push ${{ secrets.DOCKER_USERNAME }}/mongosync-docker:${{ github.event.inputs.VERSION }}
